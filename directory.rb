@@ -48,8 +48,11 @@ def print_header
 end
 
 def print(names)
-names.each_with_index {|n, i|
-  puts "#{i+1}. #{n[:name]} (#{n[:cohort]} cohort)"}
+  i=0
+  while i<=names.length-1 do
+    puts "#{i+1}. #{names[i][:name]} (#{names[i][:cohort]} cohort)"
+    i+=1
+  end
 end
 
 def print_footer(names)
