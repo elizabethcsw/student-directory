@@ -25,17 +25,24 @@ def input_students
   # get the first name
   name = gets.chomp
 
+  puts "this person's height in cm?"
+  height = gets.chomp
+
   # while the name is not empty, repeat this code
   while !name.empty? do
     if name.length<12
       # add the student hash to the array
-      students << {name: name, cohort: :november}
+      students << {name: name, cohort: :november, height: height}
     else
     end
-      puts "Now we have #{students.count} students"
+    puts "Now we have #{students.count} students"
 
     # get another name from the user
+    puts "Please enter the names of the students"
     name = gets.chomp
+    break if name.empty?
+    puts "this person's height in cm?"
+    height = gets.chomp
   end
 
   # return the array of students
@@ -50,7 +57,7 @@ end
 def print(names)
   i=0
   while i<=names.length-1 do
-    puts "#{i+1}. #{names[i][:name]} (#{names[i][:cohort]} cohort)"
+    puts "#{i+1}. #{names[i][:name]} (#{names[i][:cohort]} cohort)".center(50)
     i+=1
   end
 end
