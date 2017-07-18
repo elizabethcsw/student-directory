@@ -27,7 +27,7 @@ def input_students
 
   # while the name is not empty, repeat this code
   while !name.empty? do
-    if name.start_with?("K")
+    if name.length<12
       # add the student hash to the array
       students << {name: name, cohort: :november}
     else
