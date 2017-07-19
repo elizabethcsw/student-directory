@@ -16,7 +16,7 @@ students = [
 =end
 
 def input_students
-  puts "Please enter the names of the students"
+  puts "Please enter the name of the student"
   puts "To finish, just hit return twice"
 
   # create an empty array
@@ -25,37 +25,27 @@ def input_students
   # get the first name
   name = gets.chomp
 
-  puts "this person's height in cm?"
-  height = gets.chomp
-
-  puts "which cohort?"
-  cohort= gets.chomp.intern
-
-
-  # while the name is not empty and char less than 12, repeat this code
-  while !name.empty? do
-    if name.length<12
-      # add the student hash to the array
-      students << {name: name, cohort: cohort, height: height}
-    else
-    end
-
-    puts "Now we have #{students.count} students"
-
-    # get another name from the user
-    puts "Please enter the names of the students"
-    name = gets.chomp
-
-    #break if the user stops answering
-    break if name.empty?
-
-    #ask for the mext person's height if he answered the name just now
+  while !name.empty? && name.length<12 do
     puts "this person's height in cm?"
-    height = gets.chomp
+    height = gets.chomp.to_i
+    while height==0 || !height.is_a?(Integer) do
+      puts "please enter the height in cm of this student"
+      height = gets.chomp.to_i
+    end
 
     puts "which cohort?"
     cohort= gets.chomp.intern
+    while cohort.empty? do
+      puts "please enter the cohort in month of this student"
+      cohort= gets.chomp.intern
+    end
 
+    students << {name: name, cohort: cohort, height: height}
+    puts "Now we have #{students.count} students"
+
+    # get another name from the user
+    puts "Please enter the name of the next student"
+    name = gets.chomp
   end
 
   # return the array of students
