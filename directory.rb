@@ -25,7 +25,13 @@ def input_students
     end
 
     students << {name: name, cohort: cohort, height: height}
-    puts "Now we have #{students.count} students"
+    
+    if students.count==1
+      puts "Now we have 1 student"
+    else
+      puts "Now we have #{students.count} students"
+    end
+
 
     # get another name from the user
     puts "Please enter the name of the next student or hit return to finish"
