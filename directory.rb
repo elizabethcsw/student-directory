@@ -100,8 +100,8 @@ def print_menu
   puts "Please pick one of the options by their number:"
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list to file"
+  puts "4. Load a list from file"
   puts "9. Exit"
   puts "------End of User Menu------"
 end
@@ -131,46 +131,75 @@ def process(selection)
   end
 end
 
-def save_students
-  # open the file for writing
-  file=File.open("students.csv","w")
+def save_students(filename = "students.csv")
+  puts "Hit return to save to students.csv"
+  puts "Or enter another filename and return"
+  new_filename=STDIN.gets.strip
 
-  # file.puts "This is written to a file"
-  m=0
-  # iterate over the array of students
-  @students.each{|s|
-    student_data=[s[:name], s[:cohort]]
-    csv_line=student_data.join(",")
-    file.puts csv_line
-    m+=1
-    }
-  file.close
-  puts "Number of students saved: #{m}."
+  if !File.exists?(new_filename) && new_filename!=""
+    puts ">>>>>> File not found! <<<<<<"
+  else
+    if File.exists?(new_filename)
+      filename=new_filename
+    else new_filename==""
+    end
+
+    # open the file for writing
+    file=File.open(filename,"w")
+
+    # file.puts "This is written to a file"
+    m=0
+    # iterate over the array of students
+    @students.each{|s|
+      student_data=[s[:name], s[:cohort]]
+      csv_line=student_data.join(",")
+      file.puts csv_line
+      m+=1
+      }
+    file.close
+    puts "Number of students saved: #{m}."
+    puts "Total number of students: #{students.count}"
+
+  end
   puts "---------------------------------------"
 end
 
 #To make the method load_students work with arbitrary filenames, we need to make the method more flexible by passing the filename as the argument. However, to preserve the original functionality, let's give it a default value "students.csv".
 def load_students(filename = "students.csv")
-  file=File.open(filename,"r")
-#Reads the entire file specified by name as individual lines, and returns those lines in an array. Lines are separated by sep
-  n=0
-  file.readlines.each {|line|
-    #every line is an array separated with a comma
-    #split the line at this comma, we get an array with two values
-    #parallel assignment- assign two variables at the same time
-    #every line- left to comma saved as name, right to comma saved as cohort
-    name, cohort, height = line.chomp.split(',')
+  puts "Hit return to load from students.csv"
+  puts "Or enter another filename and return"
+  new_filename=STDIN.gets.strip
 
-    #create a new hash and put it in the array of students
+  if !File.exists?(new_filename) && new_filename!=""
+    puts ">>>>>> File not found! <<<<<<"
+  else
+    if File.exists?(new_filename)
+      filename=new_filename
+    else new_filename==""
+    end
 
-    input_vairables_into_hash(name, cohort, height)
+    file=File.open(filename,"r")
+    #Reads the entire file specified by name as individual lines, and returns those lines in an array. Lines are separated by sep
+    n=0
+    file.readlines.each {|line|
+      #every line is an array separated with a comma
+      #split the line at this comma, we get an array with two values
+      #parallel assignment- assign two variables at the same time
+      #every line- left to comma saved as name, right to comma saved as cohort
+      name, cohort, height = line.chomp.split(',')
 
-    n+=1
-  }
+      #create a new hash and put it in the array of students
+
+      input_vairables_into_hash(name, cohort, height)
+
+      n+=1
+    }
+    puts "---------------------------------------"
+    puts "Loaded #{n} from #{filename}.", "Total number of students: #{@students.count}"
+
+    file.close
+  end
   puts "---------------------------------------"
-  puts "Loaded #{n} from #{filename}.", "Total number of students: #{@students.count}"
-  puts "---------------------------------------"
-  file.close
 end
 #---------------------------------
 
