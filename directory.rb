@@ -56,24 +56,24 @@ def print_header(names)
 
     choice=STDIN.gets.strip.capitalize
     loop do
-    case choice
-      when ""
-        puts "The students of Villains Academy"
-        break
-      when !cohort_list.include?(choice)
-        puts "Please pick a month: "
-        puts cohort_list.uniq.join(" ")
-        choice=STDIN.gets.strip.capitalize
-      else
-        puts "The students of Villains Academy in the #{choice} cohort"
-        names.select!{|n| n[:cohort]==choice.to_sym}
-        break
+      case choice
+        when ""
+          puts "The students of Villains Academy"
+          break
+        when !cohort_list.include?(choice)
+          puts "Please pick a month: "
+          puts cohort_list.uniq.join(" ")
+          choice=STDIN.gets.strip.capitalize
+        else
+          puts "The students of Villains Academy in the #{choice} cohort"
+          names.select!{|n| n[:cohort]==choice.to_sym}
+          break
       end
     end
-    puts "-------------"
   else
   puts "Thank you for your time"
   end
+  puts "---------------------------------------"
 end
 
 def print_students_list(names)
@@ -91,7 +91,7 @@ def print_footer(names)
   else
     puts "Overall, we have #{names.count} great students"
   end
-puts "-------------"
+puts "---------------------------------------"
 end
 
 # Newly added methods---------------------------------
@@ -103,7 +103,7 @@ def print_menu
   puts "3. Save the list to students.csv"
   puts "4. Load the list from students.csv"
   puts "9. Exit"
-  puts "-------------"
+  puts "------End of User Menu------"
 end
 
 def show_students
@@ -124,6 +124,7 @@ def process(selection)
     load_students
   when "9"
     # this will cause the program to terminate
+    puts "Goodbye!"
     exit
   else
     puts "I don't know what you meant, try again"
@@ -135,14 +136,17 @@ def save_students
   file=File.open("students.csv","w")
 
   # file.puts "This is written to a file"
-
+  m=0
   # iterate over the array of students
   @students.each{|s|
     student_data=[s[:name], s[:cohort]]
     csv_line=student_data.join(",")
     file.puts csv_line
+    m+=1
     }
   file.close
+  puts "Number of students saved: #{m}."
+  puts "---------------------------------------"
 end
 
 #To make the method load_students work with arbitrary filenames, we need to make the method more flexible by passing the filename as the argument. However, to preserve the original functionality, let's give it a default value "students.csv".
@@ -163,9 +167,9 @@ def load_students(filename = "students.csv")
 
     n+=1
   }
-  puts "-------------"
+  puts "---------------------------------------"
   puts "Loaded #{n} from #{filename}.", "Total number of students: #{@students.count}"
-  puts "-------------"
+  puts "---------------------------------------"
   file.close
 end
 #---------------------------------
