@@ -6,21 +6,21 @@ def input_students
   puts "To finish, just hit return twice"
 
   # get the first name
-  name = gets.strip.capitalize
+  name = STDIN.gets.strip.capitalize
 
   while !name.empty? && name.length<12 do
     puts "this person's height in cm?"
-    height = gets.strip.to_i
+    height = STDIN.gets.strip.to_i
     while height==0 || !height.is_a?(Integer) do
       puts "please enter the height in cm of this student"
-      height = gets.strip.to_i
+      height = STDIN.gets.strip.to_i
     end
 
     puts "which cohort?"
-    cohort= gets.strip.capitalize
+    cohort= STDIN.gets.strip.capitalize
     while cohort.empty? do
       puts "please enter the cohort in month of this student"
-      cohort= gets.strip.capitalize
+      cohort= STDIN.gets.strip.capitalize
     end
 
     @students << {name: name, cohort: cohort, height: height}
@@ -34,7 +34,7 @@ def input_students
 
     # get another name from the user
     puts "Please enter the name of the next student or hit return to finish"
-    name = gets.strip.capitalize
+    name = STDIN.gets.strip.capitalize
   end
 
   # no longer need to return the array of students
@@ -50,7 +50,7 @@ def print_header(names)
     puts "Please pick a month: "
     puts cohort_list.uniq.join(" ")
 
-    choice=gets.strip.capitalize
+    choice=STDIN.gets.strip.capitalize
     while choice.empty? || !cohort_list.include?(choice) do
       puts "Please pick a month: "
       puts cohort_list.uniq.join(" ")
@@ -77,7 +77,7 @@ def print_footer(names)
   if names.count==1
     puts "Overall, we have 1 great student"
   else
-  puts "Overall, we have #{names.count} great students"
+    puts "Overall, we have #{names.count} great students"
   end
 puts "-------------"
 end
@@ -131,8 +131,9 @@ def save_students
   file.close
 end
 
-def load_students
-  file=File.open("students.csv","r")
+#To make the method load_students work with arbitrary filenames, we need to make the method more flexible by passing the filename as the argument. However, to preserve the original functionality, let's give it a default value "students.csv".
+def load_students(filename = "students.csv")
+  file=File.open(filename,"r")
   file.readlines.each {|line|
     #every line is an array separated with a comma
     #split the line at this comma, we get an array with two values
@@ -157,12 +158,31 @@ def interactive_menu
     # selection = gets.strip
 
     # 3. do what the user has asked
-    process(gets.strip)
+    process(STDIN.gets.strip)
 
   end
 end
 
+#---------------------------------
+
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil? # get out of the method if it isn't given
+
+  #check for file existence- functionality in the File class
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+     puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
+
+#---------------------------------
+try_load_students
 interactive_menu.call
+#---------------------------------
 
 =begin
 names=[{:name=>"eli", :cohort=>:dec, :height=>89}, {:name=>"kate", :cohort=>:dec, :height=>39}, {:name=>"mary", :cohort=>:jul, :height=>79}]
