@@ -187,7 +187,8 @@ end
 #---------------------------------
 
 def try_load_students
-  filename = ARGV.first # first argument from the command line
+  filename = "students.csv"
+  # filename = ARGV.first # first argument from the command line
   return if filename.nil? # get out of the method if it isn't given
 
   #check for file existence- functionality in the File class
