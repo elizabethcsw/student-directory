@@ -83,6 +83,7 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
+  puts "3. Save the list to students.csv"
   puts "9. Exit"
 end
 
@@ -98,6 +99,8 @@ def process(selection)
     input_students
   when "2"
     show_students
+  when "3"
+    save_students
   when "9"
     # this will cause the program to terminate
     exit
@@ -105,12 +108,21 @@ def process(selection)
     puts "I don't know what you meant, try again"
   end
 end
-=begin
-students = input_students
-print_header(students)
-print(students)
-print_footer(students)
-=end
+
+def save_students
+  # open the file for writing
+  file=File.open("students.csv","w")
+
+  file.puts "This is written to a file"
+  
+  # iterate over the array of students
+  @students.each{|s|
+    student_data=[s[:name], s[:cohort]]
+    csv_line=student_data.join(",")
+    file.puts csv_line
+    }
+  file.close
+end
 
 #---------------------------------
 
@@ -142,10 +154,17 @@ array1.each{|n| puts "#{n[:height]}"}
   p names
 end
 
-
 =end
 
 
 =begin
 [:jan, :dec, :apr].each {|co| print "#{co.to_s} "}
+=end
+
+
+=begin
+students = input_students
+print_header(students)
+print(students)
+print_footer(students)
 =end
