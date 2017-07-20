@@ -1,9 +1,9 @@
+@students = []
+# an empty array accessible to all methods
+
 def input_students
   puts "Please enter the name of the student"
   puts "To finish, just hit return twice"
-
-  # create an empty array
-  students = []
 
   # get the first name
   name = gets.strip.capitalize
@@ -23,12 +23,12 @@ def input_students
       cohort= gets.strip.capitalize
     end
 
-    students << {name: name, cohort: cohort, height: height}
+    @students << {name: name, cohort: cohort, height: height}
 
-    if students.count==1
+    if @students.count==1
       puts "Now we have 1 student"
     else
-      puts "Now we have #{students.count} students"
+      puts "Now we have #{@students.count} students"
     end
 
 
@@ -37,8 +37,8 @@ def input_students
     name = gets.strip.capitalize
   end
 
-  # return the array of students
-  students
+  # no longer need to return the array of students
+
 end
 
 def print_header(names)
@@ -64,7 +64,7 @@ def print_header(names)
   end
 end
 
-def print(names)
+def print_students_list(names)
   i=0
   while i<=names.length-1 do
     puts "#{i+1}. #{names[i][:name]} #{names[i][:height]}cm (#{names[i][:cohort]} cohort)".ljust(2)
@@ -74,10 +74,37 @@ def print(names)
 end
 
 def print_footer(names)
-puts "Overall, we have #{names.count} great students"
-puts "-------------"
+  puts "Overall, we have #{names.count} great students"
+  puts "-------------"
 end
 
+# Newly added methods---------------------------------
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end
+
+def show_students
+  print_header(@students)
+  print_students_list(@students)
+  print_footer(@students)
+end
+
+def process(selection)
+  case selection
+  when "1"
+    input_students
+  when "2"
+    show_students
+  when "9"
+    # this will cause the program to terminate
+    exit
+  else
+    puts "I don't know what you meant, try again"
+  end
+end
 =begin
 students = input_students
 print_header(students)
@@ -88,30 +115,16 @@ print_footer(students)
 #---------------------------------
 
 def interactive_menu
-  students = []
   loop do
     # 1. print the menu and ask the user what to do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit"
+    print_menu
 
     # 2. read the input and save it into a variable
-    selection = gets.strip
+    # selection = gets.strip
 
     # 3. do what the user has asked
-    case selection
-    when "1"
-      students = input_students
-    when "2"
-      print_header(students)
-      print(students)
-      print_footer(students)
-    when "9"
-      # this will cause the program to terminate
-      exit
-    else
-      puts "I don't know what you meant, try again"
-    end
+    process(gets.strip)
+
   end
 end
 
