@@ -1,9 +1,13 @@
 @students = []
 # an empty array accessible to all methods
 
+def input_vairables_into_hash(name, cohort, height)
+  @students << {name: name, cohort: cohort.to_sym, height: height}
+end
+
 def input_students
   puts "Please enter the name of the student"
-  puts "To finish, just hit return twice"
+  puts "To go back to menu, just hit return twice"
 
   # get the first name
   name = STDIN.gets.strip.capitalize
@@ -23,7 +27,7 @@ def input_students
       cohort= STDIN.gets.strip.capitalize
     end
 
-    @students << {name: name, cohort: cohort, height: height}
+    input_vairables_into_hash(name, cohort, height)
 
     if @students.count==1
       puts "Now we have 1 student"
@@ -33,7 +37,7 @@ def input_students
 
 
     # get another name from the user
-    puts "Please enter the name of the next student or hit return to finish"
+    puts "Please enter the name of the next student or hit return to go back to menu"
     name = STDIN.gets.strip.capitalize
   end
 
@@ -47,18 +51,26 @@ def print_header(names)
     names.select{|n| cohort_list << n[:cohort].to_s}
 
     puts "Which cohort would you like to be displayed?"
-    puts "Please pick a month: "
+    puts "Please pick a month or hit return to display all students: "
     puts cohort_list.uniq.join(" ")
 
     choice=STDIN.gets.strip.capitalize
-    while choice.empty? || !cohort_list.include?(choice) do
-      puts "Please pick a month: "
-      puts cohort_list.uniq.join(" ")
-      choice=gets.strip.capitalize
+    loop do
+    case choice
+      when ""
+        puts "The students of Villains Academy"
+        break
+      when !cohort_list.include?(choice)
+        puts "Please pick a month: "
+        puts cohort_list.uniq.join(" ")
+        choice=STDIN.gets.strip.capitalize
+      else
+        puts "The students of Villains Academy in the #{choice} cohort"
+        names.select!{|n| n[:cohort]==choice.to_sym}
+        break
+      end
     end
-    puts "The students of Villains Academy in the #{choice} cohort"
     puts "-------------"
-    names.select!{|n| n[:cohort]==choice.to_sym}
   else
   puts "Thank you for your time"
   end
@@ -85,11 +97,13 @@ end
 # Newly added methods---------------------------------
 
 def print_menu
+  puts "Please pick one of the options by their number:"
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
   puts "4. Load the list from students.csv"
   puts "9. Exit"
+  puts "-------------"
 end
 
 def show_students
@@ -120,7 +134,7 @@ def save_students
   # open the file for writing
   file=File.open("students.csv","w")
 
-  file.puts "This is written to a file"
+  # file.puts "This is written to a file"
 
   # iterate over the array of students
   @students.each{|s|
@@ -134,17 +148,24 @@ end
 #To make the method load_students work with arbitrary filenames, we need to make the method more flexible by passing the filename as the argument. However, to preserve the original functionality, let's give it a default value "students.csv".
 def load_students(filename = "students.csv")
   file=File.open(filename,"r")
+#Reads the entire file specified by name as individual lines, and returns those lines in an array. Lines are separated by sep
+  n=0
   file.readlines.each {|line|
     #every line is an array separated with a comma
     #split the line at this comma, we get an array with two values
     #parallel assignment- assign two variables at the same time
     #every line- left to comma saved as name, right to comma saved as cohort
-    name, cohort = line.chomp.split(',')
+    name, cohort, height = line.chomp.split(',')
 
     #create a new hash and put it in the array of students
 
-    @students << {name: name, cohort: cohort.to_sym}
+    input_vairables_into_hash(name, cohort, height)
+
+    n+=1
   }
+  puts "-------------"
+  puts "Loaded #{n} from #{filename}.", "Total number of students: #{@students.count}"
+  puts "-------------"
   file.close
 end
 #---------------------------------
@@ -172,7 +193,7 @@ def try_load_students
   #check for file existence- functionality in the File class
   if File.exists?(filename) # if it exists
     load_students(filename)
-     puts "Loaded #{@students.count} from #{filename}"
+
   else # if it doesn't exist
     puts "Sorry, #{filename} doesn't exist."
     exit # quit the program
