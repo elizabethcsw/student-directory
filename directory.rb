@@ -58,7 +58,7 @@ def print_header(names)
     end
     puts "The students of Villains Academy in the #{choice} cohort"
     puts "-------------"
-    names.select!{|n| n[:cohort]==choice}
+    names.select!{|n| n[:cohort]==choice.to_sym}
   else
   puts "Thank you for your time"
   end
@@ -74,8 +74,12 @@ def print_students_list(names)
 end
 
 def print_footer(names)
+  if names.count==1
+    puts "Overall, we have 1 great student"
+  else
   puts "Overall, we have #{names.count} great students"
-  puts "-------------"
+  end
+puts "-------------"
 end
 
 # Newly added methods---------------------------------
@@ -84,6 +88,7 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
+  puts "4. Load the list from students.csv"
   puts "9. Exit"
 end
 
@@ -101,6 +106,8 @@ def process(selection)
     show_students
   when "3"
     save_students
+  when "4"
+    load_students
   when "9"
     # this will cause the program to terminate
     exit
@@ -114,7 +121,7 @@ def save_students
   file=File.open("students.csv","w")
 
   file.puts "This is written to a file"
-  
+
   # iterate over the array of students
   @students.each{|s|
     student_data=[s[:name], s[:cohort]]
@@ -124,6 +131,21 @@ def save_students
   file.close
 end
 
+def load_students
+  file=File.open("students.csv","r")
+  file.readlines.each {|line|
+    #every line is an array separated with a comma
+    #split the line at this comma, we get an array with two values
+    #parallel assignment- assign two variables at the same time
+    #every line- left to comma saved as name, right to comma saved as cohort
+    name, cohort = line.chomp.split(',')
+
+    #create a new hash and put it in the array of students
+
+    @students << {name: name, cohort: cohort.to_sym}
+  }
+  file.close
+end
 #---------------------------------
 
 def interactive_menu
