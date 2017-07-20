@@ -75,14 +75,47 @@ end
 
 def print_footer(names)
 puts "Overall, we have #{names.count} great students"
+puts "-------------"
 end
 
+=begin
 students = input_students
 print_header(students)
 print(students)
 print_footer(students)
+=end
 
 #---------------------------------
+
+def interactive_menu
+  students = []
+  loop do
+    # 1. print the menu and ask the user what to do
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit"
+
+    # 2. read the input and save it into a variable
+    selection = gets.strip
+
+    # 3. do what the user has asked
+    case selection
+    when "1"
+      students = input_students
+    when "2"
+      print_header(students)
+      print(students)
+      print_footer(students)
+    when "9"
+      # this will cause the program to terminate
+      exit
+    else
+      puts "I don't know what you meant, try again"
+    end
+  end
+end
+
+interactive_menu.call
 
 =begin
 names=[{:name=>"eli", :cohort=>:dec, :height=>89}, {:name=>"kate", :cohort=>:dec, :height=>39}, {:name=>"mary", :cohort=>:jul, :height=>79}]
