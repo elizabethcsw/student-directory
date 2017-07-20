@@ -144,21 +144,23 @@ def save_students(filename = "students.csv")
     else new_filename==""
     end
 
-    # open the file for writing
-    file=File.open(filename,"w")
-
-    # file.puts "This is written to a file"
     m=0
+    
+    # open the file for writing
+    File.open(filename,"w"){|file|
+
     # iterate over the array of students
-    @students.each{|s|
-      student_data=[s[:name], s[:cohort]]
-      csv_line=student_data.join(",")
-      file.puts csv_line
-      m+=1
-      }
-    file.close
-    puts "Number of students saved: #{m}."
-    puts "Total number of students: #{students.count}"
+      @students.each{|s|
+        student_data=[s[:name], s[:cohort]]
+        csv_line=student_data.join(",")
+        # file.puts "This is written to a file"
+        file.puts csv_line
+        m+=1
+        }
+    }
+
+    puts "Number of students saved: #{m}"
+    puts "Total number of students: #{@students.count}"
 
   end
   puts "---------------------------------------"
@@ -178,26 +180,24 @@ def load_students(filename = "students.csv")
     else new_filename==""
     end
 
-    file=File.open(filename,"r")
-    #Reads the entire file specified by name as individual lines, and returns those lines in an array. Lines are separated by sep
-    n=0
-    file.readlines.each {|line|
-      #every line is an array separated with a comma
-      #split the line at this comma, we get an array with two values
-      #parallel assignment- assign two variables at the same time
-      #every line- left to comma saved as name, right to comma saved as cohort
-      name, cohort, height = line.chomp.split(',')
+    File.open(filename,"r"){|file|
+      n=0
+      #Reads the entire file specified by name as individual lines, and returns those lines in an array. Lines are separated by sep
+      file.readlines.each {|line|
+        #every line is an array separated with a comma
+        #split the line at this comma, we get an array with two values
+        #parallel assignment- assign two variables at the same time
+        #every line- left to comma saved as name, right to comma saved as cohort
+        name, cohort, height = line.chomp.split(',')
 
-      #create a new hash and put it in the array of students
+        #create a new hash and put it in the array of students
+        input_vairables_into_hash(name, cohort, height)
 
-      input_vairables_into_hash(name, cohort, height)
-
-      n+=1
+        n+=1
+      }
+      puts "---------------------------------------"
+      puts "Loaded #{n} from #{filename}", "Total number of students: #{@students.count}"
     }
-    puts "---------------------------------------"
-    puts "Loaded #{n} from #{filename}.", "Total number of students: #{@students.count}"
-
-    file.close
   end
   puts "---------------------------------------"
 end
