@@ -1,4 +1,8 @@
 require 'csv'
+puts __FILE__
+puts File.expand_path("../", __FILE__)+"/"+File.basename(__FILE__)
+
+
 @students = []
 # an empty array accessible to all methods
 
