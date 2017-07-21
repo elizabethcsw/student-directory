@@ -152,7 +152,7 @@ def save_students(filename = "students.csv")
 
     # iterate over the array of students
       @students.each{|s|
-        student_data=[s[:name], s[:cohort]]
+        student_data=[s[:name], s[:height], s[:cohort]]
         line << student_data
         m+=1
         }
@@ -179,16 +179,17 @@ def load_students(filename = "students.csv")
     else new_filename==""
     end
 
+    n=0
+    CSV.foreach(filename){|line|
 
-    File.open(filename,"r"){|file|
-      n=0
       #Reads the entire file specified by name as individual lines, and returns those lines in an array. Lines are separated by sep
-      file.readlines.each {|line|
+      #file.readlines.each {|line|
         #every line is an array separated with a comma
         #split the line at this comma, we get an array with two values
         #parallel assignment- assign two variables at the same time
         #every line- left to comma saved as name, right to comma saved as cohort
-        name, cohort, height = line.chomp.split(',')
+        #name, cohort, height = line.chomp.split(',')
+        name, height, cohort = line
 
         #create a new hash and put it in the array of students
         input_vairables_into_hash(name, cohort, height)
@@ -197,7 +198,7 @@ def load_students(filename = "students.csv")
       }
       puts "---------------------------------------"
       puts "Loaded #{n} from #{filename}", "Total number of students: #{@students.count}"
-    }
+
   end
   puts "---------------------------------------"
 end
