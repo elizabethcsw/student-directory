@@ -1,4 +1,5 @@
 require 'csv'
+#https://www.sitepoint.com/guide-ruby-csv-library-part/
 puts __FILE__
 puts File.expand_path("../", __FILE__)+"/"+File.basename(__FILE__)
 
